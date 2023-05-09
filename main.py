@@ -6,6 +6,8 @@ LET i = 0
 FOR i = 0 TO 10 DO
     PRINTLN(i)
 END
+LET i = TRUE
+PRINTLN(i)
 """
 
 lexer = Lexer().get_lexer()
@@ -14,7 +16,6 @@ tokens = lexer.lex(text_input)
 
 def token_generator(token_list):
     for token in token_list:
-        # print(token)
         yield token
 
 

@@ -10,15 +10,19 @@ class SymbolTable:
             'PI': math.pi,
         }
 
-    def add(self, name, value):
-        if name in self.table:
-            sys.exit("Error: variable already defined")
-        else:
-            self.table[name] = value
+    def add(self, name):
+        if name not in self.table:
+            self.table[name] = None
 
     def get(self, name):
         if name in self.table:
             return self.table[name]
+        else:
+            sys.exit("Error: variable not defined")
+
+    def setter(self, name, value):
+        if name in self.table:
+            self.table[name] = value
         else:
             sys.exit("Error: variable not defined")
 
@@ -50,10 +54,26 @@ class Assignment(Node):
     def __init__(self, name, value):
         self.name = name
         self.value = value
-        symbolTable.add(self.name, self.value.eval())
 
     def eval(self):
-        return 0
+        symbolTable.setter(self.name, self.value.eval())
+
+
+class Variable(Node):
+    def __init__(self, name):
+        self.name = name
+
+    def eval(self):
+        symbolTable.add(self.name)
+        return self.name
+
+
+class Identifier(Node):
+    def __init__(self, name):
+        self.name = name
+
+    def eval(self):
+        return symbolTable.get(self.name)
 
 
 class Println():
@@ -237,22 +257,6 @@ class MathFunction(UnOp):
             return math.random(self.right.eval())
 
 
-class Variable(Node):
-    def __init__(self, name):
-        self.name = name
-
-    def eval(self):
-        return symbolTable.get(self.name)
-
-
-class Identifier(Node):
-    def __init__(self, name):
-        self.name = name
-
-    def eval(self):
-        return symbolTable.get(self.name)
-
-
 class Factor(Node):
     def __init__(self, operator, right):
         self.right = right
@@ -309,6 +313,5 @@ class Loop(Node):
 
         # loop through statements
         for i in range(self.start.eval(), self.end.eval() + 1):
-            self.variable.value = i
-            print(symbolTable.table)
+            symbolTable.setter(self.variable.name, i)
             self.statements.eval()
