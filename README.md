@@ -35,7 +35,7 @@ comparison      -> expression ( "==" | "!=" | ">" | "<" | ">=" | "<=" ) expressi
 variable        -> letter { letter | digit }
 number          -> [ "-" ] digit { digit } [ "." digit { digit } ]
 string          -> '"' { character } '"'
-character       -> letter | digit | " " | "'" | "." | "," | ";" | ":" | "?" | "!" | "@" | "#" | "$" | "%" | "^" | "&" | "*" | "(" | ")" | "-" | "_" | "+" | "=" | "[" | "]" | "{" | "}" | "|" | "\" | "/" | "<" | ">" | "`" | "~"
+character       -> letter | digit | " " | "'" | "." | "," | "" | ":" | "?" | "!" | "@" | "#" | "$" | "%" | "^" | "&" | "*" | "(" | ")" | "-" | "_" | "+" | "=" | "[" | "]" | "{" | "}" | "|" | "\" | "/" | "<" | ">" | "`" | "~"
 letter          -> ( "A" ... "Z" ) | ( "a" ... "z" )
 digit           -> "0" ... "9"
 
@@ -70,18 +70,18 @@ Neste exemplo, a rota começa no aeroporto de partida (airport1), passa pelos wa
 ### Exemplo 2: Definir uma função para calcular a distância entre dois pontos
 
 ```vbnet
-LET altitude = 10000;
-LET targetAltitude = 20000;
-LET climbRate = 500;
-LET timeToClimb = (targetAltitude - altitude) / climbRate;
+LET altitude = 10000
+LET targetAltitude = 20000
+LET climbRate = 500
+LET timeToClimb = (targetAltitude - altitude) / climbRate
 
 FOR t = 0 TO timeToClimb DO
 {
-  LET altitude = altitude + climbRate * t;
-  WAYPOINT { WP_NAME "Climbing to " targetAltitude "ft" SPEED 250 ALTITUDE altitude };
+  LET altitude = altitude + climbRate * t
+  WAYPOINT { WP_NAME "Climbing to " targetAltitude "ft" SPEED 250 ALTITUDE altitude }
 }
 
-WAYPOINT { WP_NAME "Cruising at " targetAltitude "ft" SPEED 450 ALTITUDE targetAltitude };
+WAYPOINT { WP_NAME "Cruising at " targetAltitude "ft" SPEED 450 ALTITUDE targetAltitude }
 ```
 
 Neste exemplo, estamos modelando o comportamento de uma aeronave subindo até uma altitude alvo de 20.000 pés. Primeiro, definimos as variáveis altitude, targetAltitude, climbRate e timeToClimb para representar a altitude atual da aeronave, a altitude alvo, a taxa de subida desejada e o tempo estimado para chegar à altitude alvo. Usando um loop FOR, simulamos a subida da aeronave, atualizando a altitude em cada etapa e adicionando um ponto de passagem (waypoint) para a altitude atual em cada iteração. Finalmente, adicionamos outro waypoint para a altitude alvo, indicando que a aeronave está agora em cruzeiro.
@@ -90,15 +90,15 @@ Neste exemplo, estamos modelando o comportamento de uma aeronave subindo até um
 
 ```vbnet
 FUNCTION calculateDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371; // raio médio da Terra em km
-  const lat1Rad = lat1 * PI / 180;
-  const lat2Rad = lat2 * PI / 180;
-  const deltaLat = (lat2 - lat1) * PI / 180;
-  const deltaLon = (lon2 - lon1) * PI / 180;
-  const a = sin(deltaLat / 2) * sin(deltaLat / 2) + cos(lat1Rad) * cos(lat2Rad) * sin(deltaLon / 2) * sin(deltaLon / 2);
-  const c = 2 * atan2(sqrt(a), sqrt(1 - a));
-  const distance = R * c;
-  RETURN distance;
+  const R = 6371 // raio médio da Terra em km
+  const lat1Rad = lat1 * PI / 180
+  const lat2Rad = lat2 * PI / 180
+  const deltaLat = (lat2 - lat1) * PI / 180
+  const deltaLon = (lon2 - lon1) * PI / 180
+  const a = sin(deltaLat / 2) * sin(deltaLat / 2) + cos(lat1Rad) * cos(lat2Rad) * sin(deltaLon / 2) * sin(deltaLon / 2)
+  const c = 2 * atan2(sqrt(a), sqrt(1 - a))
+  const distance = R * c
+  RETURN distance
 }
 ```
 
@@ -106,8 +106,8 @@ FUNCTION calculateDistance(lat1, lon1, lat2, lon2) {
 
 ```vbnet
 FUNCTION convertKnotsToKmPerHour(knots) {
-  const kmPerHour = knots * 1.852;
-  RETURN kmPerHour;
+  const kmPerHour = knots * 1.852
+  RETURN kmPerHour
 }
 ```
 
@@ -115,8 +115,8 @@ FUNCTION convertKnotsToKmPerHour(knots) {
 
 ```vbnet
 FUNCTION convertFeetToMeters(feet) {
-  const meters = feet * 0.3048;
-  RETURN meters;
+  const meters = feet * 0.3048
+  RETURN meters
 }
 ```
 
@@ -124,12 +124,12 @@ FUNCTION convertFeetToMeters(feet) {
 
 ```vbnet
 FUNCTION calculateHeading(lat1, lon1, lat2, lon2) {
-  const lat1Rad = lat1 * PI / 180;
-  const lat2Rad = lat2 * PI / 180;
-  const deltaLon = (lon2 - lon1) * PI / 180;
-  const y = sin(deltaLon) * cos(lat2Rad);
-  const x = cos(lat1Rad) * sin(lat2Rad) - sin(lat1Rad) * cos(lat2Rad) * cos(deltaLon);
-  const heading = atan2(y, x) * 180 / PI;
-  RETURN heading;
+  const lat1Rad = lat1 * PI / 180
+  const lat2Rad = lat2 * PI / 180
+  const deltaLon = (lon2 - lon1) * PI / 180
+  const y = sin(deltaLon) * cos(lat2Rad)
+  const x = cos(lat1Rad) * sin(lat2Rad) - sin(lat1Rad) * cos(lat2Rad) * cos(deltaLon)
+  const heading = atan2(y, x) * 180 / PI
+  RETURN heading
 }
 ```

@@ -2,12 +2,15 @@ from lexerling import Lexer
 from parserling import Parser
 
 text_input = """
-LET i = 0
-FOR i = 0 TO 10 DO
-    PRINTLN(i)
+LET altitude = 10000
+LET targetAltitude = 20000
+LET climbRate = 500
+LET timeToClimb = (targetAltitude - altitude) / climbRate
+LET t = 0
+FOR t = 0 TO 10 DO
+  LET altitude = altitude + climbRate * t
+  PRINTLN(altitude)
 END
-LET i = TRUE
-PRINTLN(i)
 """
 
 lexer = Lexer().get_lexer()

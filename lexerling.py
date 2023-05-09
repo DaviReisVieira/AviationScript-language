@@ -25,7 +25,7 @@ class Lexer():
         self.lexer.add('FLAPS', r'FLAPS')
         self.lexer.add('SPEED', r'SPEED')
         self.lexer.add('ALTITUDE', r'ALTITUDE')
-        self.lexer.add('WAYPOINT_NAME', r'WP_NAME')
+        self.lexer.add('WP_NAME', r'WP_NAME')
 
         # Math functions
         self.lexer.add('SIN', r'SIN')

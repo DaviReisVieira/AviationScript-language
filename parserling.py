@@ -8,6 +8,7 @@ class Parser():
             [
                 "LET", "EQUALS", "IDENTIFIER", "COLON", "COMMA",
                 "NUMBER", "STRING", "BOOLEAN",
+                "TAKEOFF", "AIRCRAFT", "RUNWAY", "FLAPS", "SPEED", "ALTITUDE", "WAYPOINT", "WP_NAME", "LAND",
                 "PLUS", "MINUS", "TIMES", "DIVIDE",
                 "IF", "THEN", "ELSE", "END", "FOR", "TO", "DO",
                 "EQUAL_EQUAL", "NOT_EQUAL", "GREATER_THAN", "LESS_THAN", "GREATER_THAN_EQUAL", "LESS_THAN_EQUAL",
@@ -37,9 +38,28 @@ class Parser():
         @self.pg.production("statement : assignment")
         @self.pg.production("statement : conditional")
         @self.pg.production("statement : loop")
+        @self.pg.production("statement : operation")
         @self.pg.production("statement : println")
         def statement(p):
             return p[0]
+
+        @self.pg.production("operation : takeoff")
+        @self.pg.production("operation : land")
+        @self.pg.production("operation : waypoint")
+        def operation(p):
+            return p[0]
+
+        @self.pg.production("takeoff : TAKEOFF OPEN_BRACE AIRCRAFT IDENTIFIER RUNWAY IDENTIFIER FLAPS NUMBER SPEED NUMBER ALTITUDE NUMBER CLOSE_BRACE")
+        def takeoff(p):
+            return Takeoff(p[3], p[5], p[7], p[9], p[11])
+
+        @self.pg.production("land : LAND OPEN_BRACE AIRCRAFT IDENTIFIER RUNWAY IDENTIFIER FLAPS NUMBER SPEED NUMBER ALTITUDE NUMBER CLOSE_BRACE")
+        def land(p):
+            return Land(p[3], p[5], p[7], p[9], p[11])
+
+        @self.pg.production("waypoint : WAYPOINT OPEN_BRACE WP_NAME IDENTIFIER SPEED NUMBER ALTITUDE NUMBER CLOSE_BRACE")
+        def waypoint(p):
+            return Waypoint(p[3], p[5], p[7])
 
         @self.pg.production("conditional : IF condition THEN statements END")
         @self.pg.production("conditional : IF condition THEN statements ELSE statements END")
@@ -51,6 +71,7 @@ class Parser():
 
         @self.pg.production("loop : FOR variable EQUALS value TO value DO statements END")
         def loop(p):
+            print(p[5].eval())
             return Loop(p[1], p[3], p[5], p[7])
 
         @self.pg.production("condition : expression")

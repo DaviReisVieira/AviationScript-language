@@ -315,3 +315,41 @@ class Loop(Node):
         for i in range(self.start.eval(), self.end.eval() + 1):
             symbolTable.setter(self.variable.name, i)
             self.statements.eval()
+
+
+class Takeoff(Node):
+    def __init__(self, aircraft, runway, flaps, speed, altitude):
+        self.aircraft = aircraft
+        self.runway = runway
+        self.flaps = flaps
+        self.speed = speed
+        self.altitude = altitude
+
+    def eval(self):
+        print("Takeoff: " + self.aircraft.name + " " + self.runway.name + " " + str(self.flaps.eval()) + " " + str(
+            self.speed.eval()) + " " + str(self.altitude.eval()))
+
+
+class Land(Node):
+    # LAND OPEN_BRACE AIRCRAFT IDENTIFIER RUNWAY IDENTIFIER FLAPS NUMBER SPEED NUMBER ALTITUDE NUMBER CLOSE_BRACE
+    def __init__(self, aircraft, runway, flaps, speed, altitude):
+        self.aircraft = aircraft
+        self.runway = runway
+        self.flaps = flaps
+        self.speed = speed
+        self.altitude = altitude
+
+    def eval(self):
+        print("Land: " + self.aircraft.name + " " + self.runway.name + " " + str(self.flaps.eval()) + " " + str(
+            self.speed.eval()) + " " + str(self.altitude.eval()))
+
+
+class Waypoint(Node):
+    def __init__(self, name, speed, altitude):
+        self.name = name
+        self.speed = speed
+        self.altitude = altitude
+
+    def eval(self):
+        print("Waypoint: " + self.name.name + " " +
+              str(self.speed.eval()) + " " + str(self.altitude.eval()))
