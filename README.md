@@ -19,7 +19,7 @@ loop            -> "FOR" variable "=" value "TO" value "DO" { statement } "END"
 operation       -> ( takeoff | land | waypoint )
 takeoff         -> "TAKEOFF" "{" "AIRCRAFT" aircraftName "RUNWAY" runwayName "FLAPS" flapPosition "SPEED" speed "ALTITUDE" altitude "}"
 land            -> "LAND" "{" "AIRCRAFT" aircraftName "RUNWAY" runwayName "FLAPS" flapPosition "SPEED" speed "ALTITUDE" altitude "}"
-waypoint        -> "WAYPOINT" "{" "WAYPOINT_NAME" waypointName "SPEED" speed "ALTITUDE" altitude "}"
+waypoint        -> "WAYPOINT" "{" "WP_NAME" waypointName "SPEED" speed "ALTITUDE" altitude "}"
 function        -> "FUNCTION" functionName "(" [ parameter { "," parameter } ] ")" "{" { statement } "}"
 println         -> "PRINTLN" "(" expression ")"
 functionCall    -> functionName "(" [ expression { "," expression } ] ")"
@@ -58,9 +58,9 @@ LET waypoint3 = { "waypointName": "WP3", "lat": -22.910, "long": -43.163, "speed
 
 TAKEOFF { "AIRCRAFT": "Boeing 737", "RUNWAY": "RWY 27", "FLAPS": 10, "SPEED": 200, "ALTITUDE": 5000 }
 
-WAYPOINT { "WAYPOINT_NAME": waypoint1.waypointName, "SPEED": waypoint1.speed, "ALTITUDE": waypoint1.altitude }
-WAYPOINT { "WAYPOINT_NAME": waypoint2.waypointName, "SPEED": waypoint2.speed, "ALTITUDE": waypoint2.altitude }
-WAYPOINT { "WAYPOINT_NAME": waypoint3.waypointName, "SPEED": waypoint3.speed, "ALTITUDE": waypoint3.altitude }
+WAYPOINT { "WP_NAME": waypoint1.waypointName, "SPEED": waypoint1.speed, "ALTITUDE": waypoint1.altitude }
+WAYPOINT { "WP_NAME": waypoint2.waypointName, "SPEED": waypoint2.speed, "ALTITUDE": waypoint2.altitude }
+WAYPOINT { "WP_NAME": waypoint3.waypointName, "SPEED": waypoint3.speed, "ALTITUDE": waypoint3.altitude }
 
 LAND { "AIRCRAFT": "Boeing 737", "RUNWAY": "RWY 09", "FLAPS": 20, "SPEED": 150, "ALTITUDE": 5000 }
 ```
@@ -78,10 +78,10 @@ LET timeToClimb = (targetAltitude - altitude) / climbRate;
 FOR t = 0 TO timeToClimb DO
 {
   LET altitude = altitude + climbRate * t;
-  WAYPOINT { WAYPOINT_NAME "Climbing to " targetAltitude "ft" SPEED 250 ALTITUDE altitude };
+  WAYPOINT { WP_NAME "Climbing to " targetAltitude "ft" SPEED 250 ALTITUDE altitude };
 }
 
-WAYPOINT { WAYPOINT_NAME "Cruising at " targetAltitude "ft" SPEED 450 ALTITUDE targetAltitude };
+WAYPOINT { WP_NAME "Cruising at " targetAltitude "ft" SPEED 450 ALTITUDE targetAltitude };
 ```
 
 Neste exemplo, estamos modelando o comportamento de uma aeronave subindo até uma altitude alvo de 20.000 pés. Primeiro, definimos as variáveis altitude, targetAltitude, climbRate e timeToClimb para representar a altitude atual da aeronave, a altitude alvo, a taxa de subida desejada e o tempo estimado para chegar à altitude alvo. Usando um loop FOR, simulamos a subida da aeronave, atualizando a altitude em cada etapa e adicionando um ponto de passagem (waypoint) para a altitude atual em cada iteração. Finalmente, adicionamos outro waypoint para a altitude alvo, indicando que a aeronave está agora em cruzeiro.
