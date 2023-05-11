@@ -2,15 +2,13 @@ from lexerling import Lexer
 from parserling import Parser
 
 text_input = """
-LET altitude = 10000
-LET targetAltitude = 20000
-LET climbRate = 500
-LET timeToClimb = (targetAltitude - altitude) / climbRate
-LET t = 0
-FOR t = 0 TO 10 DO
-  LET altitude = altitude + climbRate * t
-  PRINTLN(altitude)
-END
+LET airport1 = { "name": "Aeroporto de partida", "lat": -23.432, "long": -46.533 }
+LET airport2 = { "name": "Aeroporto de chegada", "lat": -22.910, "long": -43.163 }
+LET waypoint1 = { "waypointName": "WP1", "lat": -23.356, "long": -46.670, "speed": 250, "altitude": 10000 }
+LET waypoint2 = { "waypointName": "WP2", "lat": -23.144, "long": -45.787, "speed": 300, "altitude": 12000 }
+LET waypoint3 = { "waypointName": "WP3", "lat": -22.910, "long": -43.163, "speed": 350, "altitude": 13000 }
+
+TAKEOFF { AIRCRAFT "AIT" RUNWAY "09R" FLAPS 1 SPEED 150 ALTITUDE 1000 }
 """
 
 lexer = Lexer().get_lexer()

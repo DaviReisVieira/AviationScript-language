@@ -49,9 +49,25 @@ class Parser():
         def operation(p):
             return p[0]
 
-        @self.pg.production("takeoff : TAKEOFF OPEN_BRACE AIRCRAFT IDENTIFIER RUNWAY IDENTIFIER FLAPS NUMBER SPEED NUMBER ALTITUDE NUMBER CLOSE_BRACE")
+        @self.pg.production("takeoff : TAKEOFF OPEN_BRACE AIRCRAFT aircraftName RUNWAY IDENTIFIER FLAPS NUMBER SPEED NUMBER ALTITUDE NUMBER CLOSE_BRACE")
         def takeoff(p):
             return Takeoff(p[3], p[5], p[7], p[9], p[11])
+
+        # aircraftName
+        @self.pg.production("aircraftName : STRING")
+        @self.pg.production("aircraftName : IDENTIFIER")
+        @self.pg.production("aircraftName : IDENTIFIER OPEN_BRACKET STRING CLOSE_BRACKET")
+        def aircraftName(p):
+            if p[0].gettokentype() == "STRING":
+                return p[0].value
+            elif p[0].gettokentype() == "IDENTIFIER":
+                if len(p) == 1:
+                    return Identifier(p[0].value)
+                else:
+                    identifier = Identifier(p[0].getstr())
+                    string = String(p[2].getstr())
+                    print(symbolTable.table)
+                    return Array(identifier, string).eval()
 
         @self.pg.production("land : LAND OPEN_BRACE AIRCRAFT IDENTIFIER RUNWAY IDENTIFIER FLAPS NUMBER SPEED NUMBER ALTITUDE NUMBER CLOSE_BRACE")
         def land(p):
@@ -69,9 +85,8 @@ class Parser():
             else:
                 return IfElse(p[1], p[3], p[5])
 
-        @self.pg.production("loop : FOR variable EQUALS value TO value DO statements END")
+        @self.pg.production("loop : FOR IDENTIFIER EQUALS value TO value DO statements END")
         def loop(p):
-            print(p[5].eval())
             return Loop(p[1], p[3], p[5], p[7])
 
         @self.pg.production("condition : expression")
@@ -88,11 +103,11 @@ class Parser():
         def comparison(p):
             return BinOp(p[1], p[0], p[2])
 
-        @self.pg.production("assignment : LET variable EQUALS value")
-        @self.pg.production("assignment : LET variable EQUALS object")
-        @self.pg.production("assignment : LET variable EQUALS expression")
+        @self.pg.production("assignment : LET IDENTIFIER EQUALS value")
+        @self.pg.production("assignment : LET IDENTIFIER EQUALS object")
+        @self.pg.production("assignment : LET IDENTIFIER EQUALS expression")
         def assignment(p):
-            return Assignment(p[1].eval(), p[3])
+            return Assignment(p[1].getstr(), p[3])
 
         @self.pg.production('value : NUMBER')
         def number(p):
@@ -141,16 +156,16 @@ class Parser():
             else:
                 return BinOp(p[1], p[0], p[2])
 
-        @self.pg.production('factor : variable')
+        @self.pg.production('factor : IDENTIFIER')
         @self.pg.production('factor : NUMBER')
-        @self.pg.production('factor : variable OPEN_BRACKET STRING CLOSE_BRACKET')
+        @self.pg.production('factor : IDENTIFIER OPEN_BRACKET STRING CLOSE_BRACKET')
         # @self.pg.production('factor : functionCall')
         @self.pg.production('factor : mathFunction OPEN_PAREN expression CLOSE_PAREN')
         @self.pg.production('factor : OPEN_PAREN expression CLOSE_PAREN')
         def factor(p):
             if len(p) == 1:
-                if type(p[0]) == Variable:
-                    return Identifier(p[0].eval())
+                if p[0].gettokentype() == "IDENTIFIER":
+                    return Identifier(p[0].getstr())
                 elif p[0].gettokentype() == "NUMBER":
                     return Number(p[0].value)
                 else:
@@ -158,20 +173,19 @@ class Parser():
             elif len(p) == 3:
                 return p[1]
             elif len(p) == 4:
-                if type(p[0]) == Variable and p[1].gettokentype() == "OPEN_BRACKET":
-                    identifier = Identifier(p[0].eval())
-                    # print(symbolTable.table)
-                    # print(identifier.eval())
-                    # value = identifier.eval()[p[2].getstr()]
-                    return identifier
+                if p[0].gettokentype() == "IDENTIFIER" and p[1].gettokentype() == "OPEN_BRACKET":
+                    identifier = Identifier(p[0].getstr())
+                    string = String(p[2].getstr())
+                    return Array(identifier, string)
+
                 elif p[0].gettokentype() == "SIN" or p[0].gettokentype() == "COS" or p[0].gettokentype() == "TAN" or p[0].gettokentype() == "ASIN" or p[0].gettokentype() == "ACOS" or p[0].gettokentype() == "ATAN" or p[0].gettokentype() == "SINH" or p[0].gettokentype() == "COSH" or p[0].gettokentype() == "TANH" or p[0].gettokentype() == "ASINH" or p[0].gettokentype() == "ACOSH" or p[0].gettokentype() == "ATANH" or p[0].gettokentype() == "EXP" or p[0].gettokentype() == "LOG" or p[0].gettokentype() == "LOG10" or p[0].gettokentype() == "SQRT" or p[0].gettokentype() == "CBRT" or p[0].gettokentype() == "CEIL" or p[0].gettokentype() == "FLOOR" or p[0].gettokentype() == "ABS" or p[0].gettokentype() == "ROUND" or p[0].gettokentype() == "TRUNC" or p[0].gettokentype() == "SIGNUM" or p[0].gettokentype() == "RINT" or p[0].gettokentype() == "MIN" or p[0].gettokentype() == "MAX" or p[0].gettokentype() == "RANDOM":
                     return MathFunction(p[0], p[2])
             else:
                 return UnOp(p[0], p[1])
 
-        @self.pg.production("variable : IDENTIFIER")
-        def variable(p):
-            return Variable(p[0].getstr())
+        # @self.pg.production("variable : IDENTIFIER")
+        # def variable(p):
+        #     return Variable(p[0].getstr())
 
         @self.pg.production('mathFunction : SIN')
         @self.pg.production('mathFunction : COS')

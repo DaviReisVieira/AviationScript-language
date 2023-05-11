@@ -24,7 +24,7 @@ class SymbolTable:
         if name in self.table:
             self.table[name] = value
         else:
-            sys.exit("Error: variable not defined")
+            self.table[name] = value
 
 
 symbolTable = SymbolTable()
@@ -57,15 +57,7 @@ class Assignment(Node):
 
     def eval(self):
         symbolTable.setter(self.name, self.value.eval())
-
-
-class Variable(Node):
-    def __init__(self, name):
-        self.name = name
-
-    def eval(self):
-        symbolTable.add(self.name)
-        return self.name
+        return 0
 
 
 class Identifier(Node):
@@ -74,6 +66,15 @@ class Identifier(Node):
 
     def eval(self):
         return symbolTable.get(self.name)
+
+
+class Array(Node):
+    def __init__(self, name, index):
+        self.name = name
+        self.index = index
+
+    def eval(self):
+        return symbolTable.get(self.name.name)[self.index.eval()].eval()
 
 
 class Println():
@@ -319,15 +320,18 @@ class Loop(Node):
 
 class Takeoff(Node):
     def __init__(self, aircraft, runway, flaps, speed, altitude):
-        self.aircraft = aircraft
-        self.runway = runway
-        self.flaps = flaps
-        self.speed = speed
-        self.altitude = altitude
+        print(aircraft)
+        self.aircraft = str(aircraft.getstr())
+        self.runway = str(runway.getstr())
+        self.flaps = str(flaps.getstr())
+        self.speed = str(speed.getstr())
+        self.altitude = str(altitude.getstr())
 
     def eval(self):
-        print("Takeoff: " + self.aircraft.name + " " + self.runway.name + " " + str(self.flaps.eval()) + " " + str(
-            self.speed.eval()) + " " + str(self.altitude.eval()))
+        print('-' * 21 + " TAKEOFF " + '-' * 21)
+        print("\t- AIRCRAFT" + self.aircraft + "\n\t- RUNWAY:" + self.runway + "\n\t- FLAPS:" + str(self.flaps) + "\n\t- SPEED:" + str(
+            self.speed) + "knots\n\t- ALTITUDE:" + str(self.altitude) + "feet")
+        print('-' * 51)
 
 
 class Land(Node):
@@ -340,7 +344,7 @@ class Land(Node):
         self.altitude = altitude
 
     def eval(self):
-        print("Land: " + self.aircraft.name + " " + self.runway.name + " " + str(self.flaps.eval()) + " " + str(
+        print("Land: " + self.aircraft + " " + self.runway + " " + str(self.flaps.eval()) + " " + str(
             self.speed.eval()) + " " + str(self.altitude.eval()))
 
 
@@ -351,5 +355,5 @@ class Waypoint(Node):
         self.altitude = altitude
 
     def eval(self):
-        print("Waypoint: " + self.name.name + " " +
+        print("Waypoint: " + self.name + " " +
               str(self.speed.eval()) + " " + str(self.altitude.eval()))
