@@ -2,11 +2,13 @@
 
 ## Introdução
 
-A linguagem _AviationScript_ permite a definição de aeronaves e rotas, bem como a execução de operações de voo.
+A linguagem _AviationScript_ foi desenvolvida com o objetivo de facilitar a criação e execução de rotas e
+instruções para aeronaves. Ela oferece uma sintaxe simples e intuitiva, permitindo que os usuários definam
+aeronaves, rotas, waypoints e outras operações relacionadas à aviação.
 
 ## Desenvolvedor
 
-Davi Reis Vieira de Souza
+Nome: Davi Reis Vieira de Souza
 
 ## Entregas parciais
 
@@ -24,7 +26,11 @@ A entrega 2 consiste na implementação da análise léxica e sintática da ling
 
 ## Entrega Final
 
-Utilizei o compilador realizado durante a disciplina - ConceitoB - para implementar a análise léxica e sintática da linguagem AviationScript. A análise semântica e a compilação foram implementadas utilizando a biblioteca rply, que é uma implementação do PLY para a linguagem Python. A pasta 'rplyVersion' contém a implementação da análise léxica e sintática utilizando a biblioteca rply.
+Utilizei o compilador realizado durante a disciplina - ConceitoB - para implementar a análise léxica e sintática da linguagem AviationScript.
+
+## Como executar
+
+Para executar o compilador, basta executar o arquivo 'main.py' com o comando 'python3 main.py'. O compilador irá ler o arquivo 'test1.jl'.
 
 ## Language Specification
 
